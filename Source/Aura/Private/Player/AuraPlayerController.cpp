@@ -5,10 +5,18 @@
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "Math/RotationMatrix.h"
+#include "DrawDebugHelpers.h"
+#include "Interaction/EnemyInterface.h"
 
 AAuraPlayerController::AAuraPlayerController()
 {
     bReplicates = true;
+}
+
+void AAuraPlayerController::PlayerTick(float DeltaTime)
+{
+    Super::PlayerTick(DeltaTime);
+    CursorTrace();
 }
 
 void AAuraPlayerController::BeginPlay()
@@ -59,5 +67,61 @@ void AAuraPlayerController::Move(const FInputActionValue& InputActionValue)
     {
         ControllerPawn->AddMovementInput(ForwardDirection, InputAxisVector.Y);
         ControllerPawn->AddMovementInput(Rightirection, InputAxisVector.X);
+    }
+}
+
+void AAuraPlayerController::CursorTrace()
+{
+    FHitResult CursorHit;
+    GetHitResultUnderCursor(ECC_Visibility, false, CursorHit);
+
+    if (!CursorHit.bBlockingHit)
+        return;
+
+    LastActor = ThisActor;
+    ThisActor = CursorHit.GetActor();
+
+    /*
+    * Line trace from cursor. Several scenarios:
+    * A. LastActor is valid, ThisActor is valid
+    * - Do nothing
+    * B. LastActor is valid, ThisActor is invalid
+    * - UnHightLight LastActor
+    * C. LastActor is invalid, ThisActor is valid
+    * - HightLight ThisActor
+    * D. LastActor is valid and ThisActor is valid, but different
+    * - LastActor UnHightLight
+    * - ThisActor HightLight
+    * E. LastActor is valid, ThisActor is valid but the same
+    * - Do nothing
+    */
+
+    if (LastActor == ThisActor)
+    {
+        // case A and E
+        return;
+    }
+
+    if (LastActor != nullptr)
+    {
+        if (ThisActor != nullptr)
+        {
+            // case D
+            LastActor->UnHightlightActor();
+            ThisActor->HightlightActor();
+        }
+        else
+        {
+            // case B
+            LastActor->UnHightlightActor();
+        }
+    }
+    else
+    {
+        if (ThisActor != nullptr)
+        {
+            // case C
+            ThisActor->HightlightActor();
+        }
     }
 }
