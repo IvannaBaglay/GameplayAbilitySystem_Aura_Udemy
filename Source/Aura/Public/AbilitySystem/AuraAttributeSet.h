@@ -7,6 +7,11 @@
 #include "AbilitySystemComponent.h"
 #include "AuraAttributeSet.generated.h"
 
+#define ATTRIBUTE_ACCESSORS(ClassName, PropertyName) \
+	GAMEPLAYATTRIBUTE_PROPERTY_GETTER(ClassName, PropertyName) \
+	GAMEPLAYATTRIBUTE_VALUE_GETTER(PropertyName) \
+	GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
+	GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
 /**
  * 
  */
@@ -21,32 +26,20 @@ public:
 
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Health, Category = "Vital Attributes")
     FGameplayAttributeData Health;
-	GAMEPLAYATTRIBUTE_PROPERTY_GETTER(UAuraAttributeSet, Health);
-    GAMEPLAYATTRIBUTE_VALUE_GETTER(Health);
-    GAMEPLAYATTRIBUTE_VALUE_SETTER(Health);
-    GAMEPLAYATTRIBUTE_VALUE_INITTER(Health);
+    ATTRIBUTE_ACCESSORS(UAuraAttributeSet, Health);
 
 
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_MaxHealth, Category = "Vital Attribute")
 	FGameplayAttributeData MaxHealth;
-    GAMEPLAYATTRIBUTE_PROPERTY_GETTER(UAuraAttributeSet, MaxHealth);
-    GAMEPLAYATTRIBUTE_VALUE_GETTER(MaxHealth);
-    GAMEPLAYATTRIBUTE_VALUE_SETTER(MaxHealth);
-    GAMEPLAYATTRIBUTE_VALUE_INITTER(MaxHealth);
+    ATTRIBUTE_ACCESSORS(UAuraAttributeSet, MaxHealth);
 
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Mana, Category = "Vital Attribute")
     FGameplayAttributeData Mana;
-    GAMEPLAYATTRIBUTE_PROPERTY_GETTER(UAuraAttributeSet, Mana);
-    GAMEPLAYATTRIBUTE_VALUE_GETTER(Mana);
-    GAMEPLAYATTRIBUTE_VALUE_SETTER(Mana);
-    GAMEPLAYATTRIBUTE_VALUE_INITTER(Mana);
+    ATTRIBUTE_ACCESSORS(UAuraAttributeSet, Mana);
 
     UPROPERTY(BlueprintReadOnly, ReplicatedUsing= OnRep_MaxMana,  Category = "Vital Attribute")
     FGameplayAttributeData MaxMana;
-    GAMEPLAYATTRIBUTE_PROPERTY_GETTER(UAuraAttributeSet, MaxMana);
-    GAMEPLAYATTRIBUTE_VALUE_GETTER(MaxMana);
-    GAMEPLAYATTRIBUTE_VALUE_SETTER(MaxMana);
-    GAMEPLAYATTRIBUTE_VALUE_INITTER(MaxMana);
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet, MaxMana);
 
 	UFUNCTION()
     void OnRep_Health(const FGameplayAttributeData& OldHealth);
