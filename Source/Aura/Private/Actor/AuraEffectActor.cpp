@@ -28,6 +28,7 @@ void AAuraEffectActor::OnOverlap(UPrimitiveComponent* OverlapComponent, AActor* 
             // TODO: This is a quick and dirty way to modify the attribute, we should use GameplayEffect to do this instead
             UAuraAttributeSet* MutableAuraAttributeSet = const_cast<UAuraAttributeSet*>(AuraAttributeSet);
             MutableAuraAttributeSet->SetHealth(AuraAttributeSet->GetHealth() + 25.f);
+            MutableAuraAttributeSet->SetMana(AuraAttributeSet->GetMana() - 25.f);
             Destroy();
         }
     }
