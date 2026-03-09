@@ -4,13 +4,14 @@
 #include "Character/AuraEnemy.h"
 #include "Aura/Aura.h"
 #include "AbilitySystemComponent.h"
+#include "AbilitySystem/AuraAbilitySystemComponentBase.h"
 #include "AttributeSet.h"
 
 AAuraEnemy::AAuraEnemy()
 {
     GetMesh()->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
 
-    AbilitySystemComponent = CreateDefaultSubobject<UAbilitySystemComponent>("AbilitySystemComponent");
+    AbilitySystemComponent = CreateDefaultSubobject<UAuraAbilitySystemComponentBase>("AbilitySystemComponent");
     AbilitySystemComponent->SetIsReplicated(true);
     AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Minimal);
 
@@ -21,14 +22,7 @@ AAuraEnemy::AAuraEnemy()
 void AAuraEnemy::BeginPlay()
 {
     Super::BeginPlay();
-    if (AbilitySystemComponent != nullptr)
-    {
-        AbilitySystemComponent->InitAbilityActorInfo(this, this);
-    }
-    else
-    {
-        UE_LOG(LogMyGame, Error, TEXT("[AAuraEnemy]: InitAbilityActorInfo failed"));
-    }
+    InitAbilityActorInfo();
 }
 
 void AAuraEnemy::HightlightActor()
@@ -49,4 +43,17 @@ void AAuraEnemy::UnHightlightActor()
 
     Weapon->SetRenderCustomDepth(bHightlighted);
     //Weapon->SetCustomDepthStencilValue(0);
+}
+
+void AAuraEnemy::InitAbilityActorInfo()
+{
+    if (AbilitySystemComponent != nullptr)
+    {
+        AbilitySystemComponent->InitAbilityActorInfo(this, this);
+        Cast<UAuraAbilitySystemComponentBase>(AbilitySystemComponent)->AbilityActorInfoSet();
+    }
+    else
+    {
+        UE_LOG(LogMyGame, Error, TEXT("[AAuraEnemy]: InitAbilityActorInfo failed"));
+    }
 }
