@@ -37,10 +37,20 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
         {
             for (const FGameplayTag& Tag : AssetTags)
             {
-                const FString TagString = FString::Printf(TEXT("Tag Applied: %s"), *Tag.ToString()); // Or Tag.GetTagName()
-                GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TagString);
+                // Example, Tag = Message.HealthPotion
+                // 
 
-                FUIWidgetRow* Row = GetDataTableRowByTag<FUIWidgetRow>(MessageWidgetDataTable, Tag);
+
+                //"Message.HealthPotion".MatchesTag("Message") will return True, "Message".MatchesTag("Message.HealthPotion") will return False
+                const FGameplayTag MessageTag = FGameplayTag::RequestGameplayTag(FName("Message"));
+                if (Tag.MatchesTag(MessageTag))
+                {
+                    FUIWidgetRow* Row = GetDataTableRowByTag<FUIWidgetRow>(MessageWidgetDataTable, Tag);
+                    MessageWidgetRowDelegate.Broadcast(*Row);
+                }
+
+                //const FString TagString = FString::Printf(TEXT("Tag Applied: %s"), *Tag.ToString()); // Or Tag.GetTagName()
+                //GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TagString);
             }
         }
     );
@@ -66,3 +76,9 @@ void UOverlayWidgetController::MaxManaChanged(const FOnAttributeChangeData& Data
 {
     OnMaxManaChanged.Broadcast(Data.NewValue);
 }
+
+//void UOverlayWidgetController::MessageDelegate(const FUIWidgetRow& Data) const
+//{
+//    const FString TagString = FString::Printf(TEXT("Tag Applied: %s"), Data.Message);
+//    GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TagString);
+//}
