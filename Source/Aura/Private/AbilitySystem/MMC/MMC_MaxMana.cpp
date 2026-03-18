@@ -5,6 +5,7 @@
 #include "AbilitySystem/AuraAttributeSet.h"
 #include "Interaction/CombatInterface.h"
 
+// MMC - Mod Magnitude Calculation
 UMMC_MaxMana::UMMC_MaxMana()
 {
     IntelligenceDef.AttributeToCapture = UAuraAttributeSet::GetIntelligenceAttribute();
