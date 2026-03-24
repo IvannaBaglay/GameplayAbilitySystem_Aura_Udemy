@@ -12,10 +12,13 @@ void UAttributeMenuWidgetController::BroadcastInitialValues()
 
     check(AttributeInformation);
 
-    FAuraAttributeInfo Info = AttributeInformation->FindAttributeInfoForTag(FAuraGameplayTags::Get().Attributes_Primary_Strength);
-    Info.AttributeValue = AS->GetStrength();
-
-    AttributeInfoDelegate.Broadcast(Info);
+    for (auto& Pair : AS->TagsToAttributes)
+    {
+        FAuraAttributeInfo Info =  AttributeInformation->FindAttributeInfoForTag(Pair.Key);
+        FGameplayAttribute Attribute = Pair.Value();
+        Info.AttributeValue = Attribute.GetNumericValue(AS);
+        AttributeInfoDelegate.Broadcast(Info);
+    }
 }
 
 void UAttributeMenuWidgetController::BindCallbacksToDependencies()
