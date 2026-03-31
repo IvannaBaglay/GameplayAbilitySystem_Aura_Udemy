@@ -11,6 +11,8 @@ DECLARE_MULTICAST_DELEGATE_OneParam(FEffectAssetTag, const FGameplayTagContainer
 /**
  * 
  */
+struct FGameplayTag;
+
 UCLASS()
 class AURA_API UAuraAbilitySystemComponentBase : public UAbilitySystemComponent
 {
@@ -21,6 +23,9 @@ public:
     FEffectAssetTag OnEffectAssetTagChanged;
 
 	void AddCharacterAbilities(const TArray<TSubclassOf<UGameplayAbility>>& StartupAbilities);
+
+	void AbilityInputTagHeld(const FGameplayTag& InputTag);
+	void AbilityInputTagReleased(const FGameplayTag& InputTag);
 protected:
 	void EffectApplied(UAbilitySystemComponent* AbilitySystemComponent, const FGameplayEffectSpec& EffectSpec, FActiveGameplayEffectHandle ActiveEffectHandle);
 

@@ -7,6 +7,8 @@
 #include "Math/RotationMatrix.h"
 #include "DrawDebugHelpers.h"
 #include "Input/AuraInputComponent.h"
+#include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystem/AuraAbilitySystemComponentBase.h"
 #include "Interaction/EnemyInterface.h"
 
 AAuraPlayerController::AAuraPlayerController()
@@ -132,15 +134,34 @@ void AAuraPlayerController::CursorTrace()
 
 void AAuraPlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
 {
-    GEngine->AddOnScreenDebugMessage(1, 5.f, FColor::Green, FString::Printf(TEXT("Pressed: %s"), *InputTag.ToString()));
+    //GEngine->AddOnScreenDebugMessage(1, 5.f, FColor::Green, FString::Printf(TEXT("Pressed: %s"), *InputTag.ToString()));
 }
 
 void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 {
-    GEngine->AddOnScreenDebugMessage(2, 5.f, FColor::Red, FString::Printf(TEXT("Released: %s"), *InputTag.ToString()));
+    //if (GetAuraAbilitySystemComponentBase() == nullptr)
+    //    return;
+    //
+    //GetAuraAbilitySystemComponentBase()->AbilityInputTagReleased(InputTag);
+    if (GetAuraAbilitySystemComponentBase() == nullptr)
+        return;
+
+    GetAuraAbilitySystemComponentBase()->AbilityInputTagReleased(InputTag);
 }
 
 void AAuraPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 {
-    GEngine->AddOnScreenDebugMessage(3, 5.f, FColor::Blue, FString::Printf(TEXT("Held: %s"), *InputTag.ToString()));
+    if (GetAuraAbilitySystemComponentBase() == nullptr)
+        return;
+    //GEngine->AddOnScreenDebugMessage(3, 5.f, FColor::Blue, FString::Printf(TEXT("Held: %s"), *InputTag.ToString()));
+    GetAuraAbilitySystemComponentBase()->AbilityInputTagHeld(InputTag);
+}
+
+UAuraAbilitySystemComponentBase* AAuraPlayerController::GetAuraAbilitySystemComponentBase()
+{
+    if (AuraAbilitySystemComponentBase == nullptr)
+    {
+        AuraAbilitySystemComponentBase = Cast<UAuraAbilitySystemComponentBase>(UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetPawn()));
+    }
+    return AuraAbilitySystemComponentBase;
 }
