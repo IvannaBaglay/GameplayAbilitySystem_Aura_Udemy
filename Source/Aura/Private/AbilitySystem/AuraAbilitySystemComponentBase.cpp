@@ -8,7 +8,7 @@
 
 void UAuraAbilitySystemComponentBase::AbilityActorInfoSet()
 {
-    OnGameplayEffectAppliedDelegateToSelf.AddUObject(this, &UAuraAbilitySystemComponentBase::EffectApplied);
+    OnGameplayEffectAppliedDelegateToSelf.AddUObject(this, &UAuraAbilitySystemComponentBase::ClientEffectApplied);
 
     const FAuraGameplayTags& GameplayTags = FAuraGameplayTags::Get();
     //GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Orange, FString::Printf(TEXT("Tag: %s"), *GameplayTags.Attributes_Secondary_Armor.ToString()));
@@ -63,7 +63,7 @@ void UAuraAbilitySystemComponentBase::AbilityInputTagReleased(const FGameplayTag
     }
 }
 
-void UAuraAbilitySystemComponentBase::EffectApplied(UAbilitySystemComponent* AbilitySystemComponent, const FGameplayEffectSpec& EffectSpec, FActiveGameplayEffectHandle ActiveEffectHandle)
+void UAuraAbilitySystemComponentBase::ClientEffectApplied_Implementation(UAbilitySystemComponent* AbilitySystemComponent, const FGameplayEffectSpec& EffectSpec, FActiveGameplayEffectHandle ActiveEffectHandle)
 {
     FGameplayTagContainer TagContainer;
     EffectSpec.GetAllAssetTags(TagContainer);
